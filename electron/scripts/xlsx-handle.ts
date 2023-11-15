@@ -1,4 +1,3 @@
-export const  handleFileOpen = (e) => {
-  console.log(e)
+export const  handleFileOpen = () => {
   return '222'
 }

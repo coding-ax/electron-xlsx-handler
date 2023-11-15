@@ -1,11 +1,11 @@
 import * as XLSX from 'xlsx'
 
-export const excelToJsonV1 = (file, sheetName = ''): Promise<any> =>
+export const excelToJsonV1 = (file: File, sheetName = ''): Promise<unknown[]> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = (e): void => {
-      const data = e.target.result;
+      const data = e?.target?.result;
       const workbook = XLSX.read(data, {
         type: 'binary',
       });
@@ -23,7 +23,7 @@ export const excelToJsonV1 = (file, sheetName = ''): Promise<any> =>
     reader.readAsBinaryString(file);
   });
 
- export const jsonToExcel = (fileName, sheetName, jsonList) => {
+ export const jsonToExcel = (fileName: string, sheetName: string, jsonList: Record<string, string | number | undefined>[]) => {
     const workSheet = XLSX.utils.json_to_sheet(jsonList);
     const workbook = {
       SheetNames: [sheetName],

@@ -16,7 +16,7 @@ const emptyStyle = {
   padding: 30,
 };
 
-const parseData = (jsonList) => {
+const parseData = (jsonList: Record<string, unknown>[]) => {
   const usefulYear = new Array(2020 - 1996)
     .fill(0)
     .map((_, idx) => `${1997 + idx}`);
@@ -25,14 +25,14 @@ const parseData = (jsonList) => {
     Object.entries(groupData).map(([k, v]) => [k, v?.[0]?.["Country Code"]])
   );
   // 生成这一年每一次的数据
-  const result = [];
+  const result: unknown[] = [];
   Object.entries(groupData).forEach(([countryName, rawData]) => {
     usefulYear.forEach((year) => {
       const rawObjectData = rawData.reduce((prev, currentItem) => {
         const currentIndicatorName = currentItem?.["Indicator Name"];
         const currentYearData = currentItem?.[year] || undefined;
         if (currentIndicatorName) {
-          prev[currentIndicatorName] = currentYearData;
+          prev[currentIndicatorName as string] = currentYearData;
         }
         return prev;
       }, {});
@@ -66,11 +66,11 @@ function App() {
       }, 100)
     );
     try {
-      const data = await excelToJsonV1(uploadFileMeta, sheetName);
+      const data = await excelToJsonV1(uploadFileMeta as File, sheetName);
       console.log(data);
-      const result = parseData(data)
+      const result = parseData(data as Record<string, unknown>[])
       console.log(result);
-      jsonToExcel('culeLCX.xlsx', 'ax', result)
+      jsonToExcel('culeLCX.xlsx', 'ax', result as Record<string, string | number>[])
     } finally {
       setLoading(false);
     }
